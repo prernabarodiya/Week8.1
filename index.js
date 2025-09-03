@@ -1,13 +1,20 @@
-const expresss = require("express");
-const app = expresss();
+require('dotenv').config()
+const express = require("express");
+
+const app = express();
 const { userRouter } = require("./routes/user");
 const { courseRouter } = require("./routes/course");
 const { adminRouter } = require("./routes/admin");
+app.use(express.json());
+const mongoose = require("mongoose");
 
 app.use("/user", userRouter);
-app.use("/ourse", courseRouter);
+app.use("/course", courseRouter);
 app.use("/admin", adminRouter);
 
-
-
-app.listen(3000);
+async function main() {
+    await mongoose.connect(process.env.MONGO_URL)
+    app.listen(3000);
+    console.log("listening on port 3000")
+}
+main();

@@ -1,8 +1,11 @@
-const { Schema, default: mongoose, model } = require("mongoose");
+const mongoose = require("mongoose");
+
+
+const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const userSchema = new Schema({
-    email: String,
+    email: {type: String, unique: true},
     firstName: String,
     password: String,
     lastName: String
@@ -17,7 +20,7 @@ const courseSchema = new Schema({
 })
 
 const adminSchema = new Schema({
-    email: String,
+    email: {type: String, unique: true},
     firstName: String,
     password: String,
     lastName: String
@@ -29,14 +32,14 @@ const purchaseSchema = new Schema({
 })
 
 const userModel = mongoose.model("user", userSchema);
-const adminModel = mongoose.model("user", adminSchema);
-const courseModel = mongoose.model("user", courseSchema);
-const purchaseModel = mongoose.model("user", purchaseSchema);
+const adminModel = mongoose.model("admin", adminSchema);
+const courseModel = mongoose.model("course", courseSchema);
+const purchaseModel = mongoose.model("purchase", purchaseSchema);
 
 module.exports = {
     userModel,
-    courseModel,
     adminModel,
+    courseModel,
     purchaseModel
 }
 
