@@ -100,50 +100,21 @@ userRouter.post("/signin", async function(req, res){
 })
 
 userRouter.get("/purchases", userMiddleware, async function(req, res){
-    // const userId = req.userId;
+    const userId = req.userId;
 
-    // const purchases = await purchaseModel.find({
-    //     userId
-    // })
+    const purchases = await purchaseModel.find({
+        userId
+    })
 
-    // res.json({
-    //     message: "Purchased Courses by user are : ",
-    //     purchases
-    // })
+    const courseData = await courseModel.find({
+        _id: { $in: purchases.map(x => x.courseId)}
+    })
 
-
-    try {
-        const userId = req.userId;
-
-        // get all purchases of the user
-        const purchases = await purchaseModel.find({ userId });
-
-        // fetch course details for each purchase
-        const courses = await Promise.all(
-            purchases.map(async (p) => {
-                const course = await courseModel.findById(p.courseId);
-                return course ? {
-                    purchaseId: p._id,
-                    courseId: course._id,
-                    title: course.title,
-                    desc: course.desc,
-                    price: course.price,
-                    imageUrl: course.imageUrl,
-                    creatorId: course.creatorId
-                } : null;
-            })
-        );
-
-        res.json({
-            message: "Purchased Courses by user are:",
-            purchases: courses.filter(c => c !== null) // remove nulls if course not found
-        });
-    } catch (err) {
-        res.status(500).json({
-            message: "Error fetching purchases",
-            error: err.message
-        });
-    }
+    res.json({
+        message: "Purchased Courses by user are : ",
+        purchases,
+        courseData
+    })
 })
 
 
