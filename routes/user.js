@@ -11,9 +11,6 @@ const jwt = require("jsonwebtoken");
 const e = require("express");
 
 
-
-
-
 userRouter.post("/signup", async function(req, res){
 
     const { email, password, firstName, lastName} = req.body;
